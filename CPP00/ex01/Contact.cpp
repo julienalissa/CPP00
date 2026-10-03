@@ -1,21 +1,19 @@
-#ifndef PhoneBook
-#define PhoneBook
-
-#include <string>
-#include <iostream>
 #include "Contact.hpp"
 
-class PhoneBook
+Contact::Contact()
 {
-	// Methodes
-	public:
-	PhoneBook();
+}
 
-	~PhoneBook();
+Contact::~Contact()
+{
+}
 
-	//attributs
-	private:
-	std::string
+void Contact::put_first_name(const std::string& value)
+{
+	first_name = value;
+}
 
-};
-#endif
+const std::string& Contact::get_first_name() const
+{
+	return (first_name);
+}
