@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 			j++;
 		}
 		i++;
-		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 	return (0);
 }
