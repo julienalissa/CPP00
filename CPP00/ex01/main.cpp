@@ -9,10 +9,29 @@ int	read_line(const std::string &msg, std::string &texte)
 		std::cout << msg;
 		if (!std::getline(std::cin, texte))
 			return (1);
-		if (!texte.empty())
+		if (texte.find_first_not_of(" \t") != std::string::npos)
 			return (0);
+
 		std::cout << "It can't be empty" << std::endl;
 	}
+}
+
+int	is_phone(const std::string &s)
+{
+	size_t	i;
+
+	i = 0;
+	if (s.length() > 0 && s[0] == '+')
+		i = 1;
+	if (s.length() == i)
+		return (0);
+	while (i < s.length())
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int	add_contact(PhoneBook &pb)
@@ -32,9 +51,16 @@ int	add_contact(PhoneBook &pb)
 		return (1);
 	contact.put_surname(texte);
 
-	if (read_line("Insert the phone number : ", texte) == 1)
-		return (1);
-	contact.put_phone_nb(texte);
+
+	while (1)
+	{
+		if (read_line("Insert the phone number : ", texte) == 1)
+			return (1);
+		if (is_phone(texte))
+			break;
+		std::cout << "Invalid phone number" << std::endl;
+	}
+		contact.put_phone_nb(texte);
 
 	if (read_line("Insert the dark secret : ", texte) == 1)
 		return (1);
@@ -81,26 +107,35 @@ void	display_contact(PhoneBook &pb)
 	}
 }
 
-int	display_index(PhoneBook &pb)
+int	check_errors(int index, int count, std::string line)
 {
-	int			count;
-	int			index;
-	std::string line;
-
-	count = pb.get_count();
-	std::cout << "Enter index : ";
 	if (!std::getline(std::cin, line))
 		return (1);
-	if (line.length() != 1 || line[0] < '0' || line[0] >'9' || index >= count)
+	if (line.length() != 1 || line[0] < '0' || line[0] >'9')
 	{
-		std::cout << "Invalid index" << std::endl;
-		return (0);
+		std::cout << "Invalid index, please insert a valid index" << std::endl;
+		return (1);
 	}
 	index = line[0] - '0';
 	if (index >= count)
 	{
-		std::cout << "Invlalid index" << std::endl;
-		return (0);
+		std::cout << "Invalid index, please insert a valid index" << std::endl;
+		return (1);
+	}
+	return (0);
+}
+
+int	display_index(PhoneBook &pb)
+{
+	int			count;
+	int			index;
+	std::string	line;
+
+	index = 0;
+	count = pb.get_count();
+	std::cout << "Enter index : ";
+	while (check_errors(index, count, line) != 0)
+	{
 	}
 	std::cout << "First name : " << pb.get_contact(index).get_first_name() << std::endl;
 	std::cout << "Last name : " << pb.get_contact(index).get_last_name() << std::endl;
@@ -118,7 +153,7 @@ int	main(void)
 	std::cout << "Welcome to the phone book !" << std::endl;
 	while (1)
 	{
-		std::cout << "You can enter your command : " << std::endl;
+		std::cout << "You can enter your command (ADD), (SEARCH) or (EXIT) : " << std::endl;
 		if (!std::getline(std::cin, line))
 			break;
 		if (line == "EXIT")
@@ -131,7 +166,7 @@ int	main(void)
 		else if (line == "SEARCH")
 		{
 			display_contact(pb);
-			if (display_index(pb) == 1)
+			if (display_index(pb))
 				break;
 		}
 		else
