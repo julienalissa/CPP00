@@ -2,34 +2,41 @@
 #include <iostream>
 #include "PhoneBook.hpp"
 
+int	read_line(const std::string &msg, std::string &texte)
+{
+	while (1)
+	{
+		std::cout << msg;
+		if (!std::getline(std::cin, texte))
+			return (1);
+		if (!texte.empty())
+			return (0);
+		std::cout << "It can't be empty" << std::endl;
+	}
+}
 
 int	add_contact(PhoneBook &pb)
 {
 	std::string	texte;
 	Contact		contact;
 
-	std::cout << "Insert the First Name : ";
-	if (!std::getline(std::cin, texte))
+	if (read_line("Insert First Name : ", texte) == 1)
 		return (1);
 	contact.put_first_name(texte);
 
-	std::cout << "Insert the Last Name : ";
-	if (!std::getline(std::cin, texte))
+	if (read_line("Insert the Last Name : ", texte) == 1)
 		return (1);
 	contact.put_last_name(texte);
 
-	std::cout << "Insert the surname : ";
-	if (!std::getline(std::cin, texte))
+	if (read_line("Insert the surname : ", texte) == 1)
 		return (1);
 	contact.put_surname(texte);
 
-	std::cout << "Insert the phone number : ";
-	if (!std::getline(std::cin, texte))
+	if (read_line("Insert the phone number : ", texte) == 1)
 		return (1);
 	contact.put_phone_nb(texte);
 
-	std::cout << "Insert the dark secret : ";
-	if (!std::getline(std::cin, texte))
+	if (read_line("Insert the dark secret : ", texte) == 1)
 		return (1);
 	contact.put_dark_secret(texte);
 	pb.add_contact(contact);
@@ -84,10 +91,15 @@ int	display_index(PhoneBook &pb)
 	std::cout << "Enter index : ";
 	if (!std::getline(std::cin, line))
 		return (1);
-	index = line[0] - '0';
 	if (line.length() != 1 || line[0] < '0' || line[0] >'9' || index >= count)
 	{
 		std::cout << "Invalid index" << std::endl;
+		return (0);
+	}
+	index = line[0] - '0';
+	if (index >= count)
+	{
+		std::cout << "Invlalid index" << std::endl;
 		return (0);
 	}
 	std::cout << "First name : " << pb.get_contact(index).get_first_name() << std::endl;
@@ -100,42 +112,27 @@ int	display_index(PhoneBook &pb)
 
 int	main(void)
 {
-	// Contact	a;
-	// Contact	b;
-
-
-	// a.put_first_name("Prenom");
-	// a.put_dark_secret("le secret");
-	// b.put_first_name("prenom2");
-	// b.put_dark_secret("le secret2");
-	// pb.add_contact(a);
-	// pb.add_contact(b);
-
-	// std::cout << "Le nb de count : " << pb.get_count() << std::endl;
-	// std::cout << "le [0] : " << pb.get_contact(0).get_first_name() << std::endl;
-	// std::cout << "le [1] : " << pb.get_contact(1).get_first_name() << std::endl;
-
 	PhoneBook pb;
 	std::string line;
 
 	std::cout << "Welcome to the phone book !" << std::endl;
 	while (1)
 	{
-		std::cout << "You can enter you command : " << std::endl;
+		std::cout << "You can enter your command : " << std::endl;
 		if (!std::getline(std::cin, line))
-			return (1);
-		if (line == "Exit" || line == "EXIT" || line == "exit")
 			break;
-		else if (line == "Add" || line == "ADD" || line == "add")
+		if (line == "EXIT")
+			break;
+		else if (line == "ADD")
 		{
 			if (add_contact(pb) == 1)
-				return(1);
+				break;
 		}
-		else if (line == "Search" || line == "SEARCH" || line == "search")
+		else if (line == "SEARCH")
 		{
 			display_contact(pb);
 			if (display_index(pb) == 1)
-				return (1);
+				break;
 		}
 		else
 		{
