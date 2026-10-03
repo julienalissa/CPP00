@@ -81,7 +81,7 @@ std::string	ten_element(const std::string &str)
 	return (str);
 }
 
-void	display_contact(PhoneBook &pb)
+int	display_contact(PhoneBook &pb)
 {
 	int	count;
 	int	i;
@@ -91,7 +91,7 @@ void	display_contact(PhoneBook &pb)
 	if (count == 0)
 	{
 		std::cout << "Phonebook is empty" << std::endl;
-		return ;
+		return (1);
 	}
 	std::cout << std::setw(10) << "Index" << "|";
 	std::cout << std::setw(10) << "First Name" << "|";
@@ -105,6 +105,7 @@ void	display_contact(PhoneBook &pb)
 		std::cout << std::setw(10) << ten_element(pb.get_contact(i).get_surname()) << "|" << std::endl;
 		i++;
 	}
+	return (0);
 }
 
 int	check_errors(int &index, int count)
@@ -169,7 +170,8 @@ int	main(void)
 		}
 		else if (line == "SEARCH")
 		{
-			display_contact(pb);
+			if (display_contact(pb) == 1)
+				continue;
 			if (display_index(pb))
 				break;
 		}
