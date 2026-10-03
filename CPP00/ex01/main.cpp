@@ -107,10 +107,13 @@ void	display_contact(PhoneBook &pb)
 	}
 }
 
-int	check_errors(int index, int count, std::string line)
+int	check_errors(int &index, int count)
 {
+	std::string	line;
+
+	std::cout << "Enter index : ";
 	if (!std::getline(std::cin, line))
-		return (1);
+		return (2);
 	if (line.length() != 1 || line[0] < '0' || line[0] >'9')
 	{
 		std::cout << "Invalid index, please insert a valid index" << std::endl;
@@ -129,14 +132,15 @@ int	display_index(PhoneBook &pb)
 {
 	int			count;
 	int			index;
-	std::string	line;
+	int			r;
 
 	index = 0;
 	count = pb.get_count();
-	std::cout << "Enter index : ";
-	while (check_errors(index, count, line) != 0)
-	{
-	}
+	r = check_errors(index, count);
+	while (r == 1)
+		r = check_errors(index, count);
+	if (r == 2)
+		return (1);
 	std::cout << "First name : " << pb.get_contact(index).get_first_name() << std::endl;
 	std::cout << "Last name : " << pb.get_contact(index).get_last_name() << std::endl;
 	std::cout << "Nickname : " << pb.get_contact(index).get_surname() << std::endl;
