@@ -1,0 +1,14 @@
+Reference :
+& = reference = un autre nom pour la meme chose
+
+string a = "salut"
+&b = a;
+b = "oui"
+
+a et b sont la meme chose
+// la c'est passage par reference
+
+
+Contact contacts[8] : cela cree 8 objets de ce modele
+count : va de 0 a 8 car 9 possibilite seulement
+next : 0 a 7 car car il ya 8 contacts
