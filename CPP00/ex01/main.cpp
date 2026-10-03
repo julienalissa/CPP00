@@ -3,7 +3,7 @@
 #include "PhoneBook.hpp"
 
 
-int	add_contact(PhoneBook pb)
+int	add_contact(PhoneBook &pb)
 {
 	std::string	texte;
 	Contact		contact;
@@ -36,22 +36,66 @@ int	add_contact(PhoneBook pb)
 	return (0);
 }
 
-void	search(PhoneBook pb)
+std::string	ten_element(const std::string &str)
+{
+	std::string string;
+
+	if (str.length() > 10)
+	{
+		string = str.substr(0, 9) + ".";
+		return (string);
+	}
+	return (str);
+}
+
+void	display_contact(PhoneBook &pb)
 {
 	int	count;
 	int	i;
 
 	i = 0;
 	count = pb.get_count();
-	std::cout << count << std::endl;
+	if (count == 0)
+	{
+		std::cout << "Phonebook is empty" << std::endl;
+		return ;
+	}
+	std::cout << std::setw(10) << "Index" << "|";
+	std::cout << std::setw(10) << "First Name" << "|";
+	std::cout << std::setw(10) << "Last Name" << "|";
+	std::cout << std::setw(10) << "Nickname" << "|" << std::endl;
 	while (i < count)
 	{
 		std::cout << std::setw(10) << i << "|";
-		std::cout << pb.get_contact(i).get_first_name() << "|";
-		std::cout << pb.get_contact(i).get_last_name() << "|";
-		std::cout << pb.get_contact(i).get_surname() << "|";
+		std::cout << std::setw(10) << ten_element(pb.get_contact(i).get_first_name()) << "|";
+		std::cout << std::setw(10) << ten_element(pb.get_contact(i).get_last_name()) << "|";
+		std::cout << std::setw(10) << ten_element(pb.get_contact(i).get_surname()) << "|" << std::endl;
 		i++;
 	}
+}
+
+int	display_index(PhoneBook &pb)
+{
+	int			count;
+	int			index;
+	std::string line;
+
+	count = pb.get_count();
+	std::cout << "Enter index : ";
+	if (!std::getline(std::cin, line))
+		return (1);
+	index = line[0] - '0';
+	if (line.length() != 1 || line[0] < '0' || line[0] >'9' || index >= count)
+	{
+		std::cout << "Invalid index" << std::endl;
+		return (0);
+	}
+	std::cout << "First name : " << pb.get_contact(index).get_first_name() << std::endl;
+	std::cout << "Last name : " << pb.get_contact(index).get_last_name() << std::endl;
+	std::cout << "Nickname : " << pb.get_contact(index).get_surname() << std::endl;
+	std::cout << "Phone number : " << pb.get_contact(index).get_phone_nb() << std::endl;
+	std::cout << "Darkest secret : " << pb.get_contact(index).get_dark_secret() << std::endl;
+	return (0);
 }
 
 int	main(void)
@@ -89,7 +133,9 @@ int	main(void)
 		}
 		else if (line == "Search" || line == "SEARCH" || line == "search")
 		{
-			search(pb);
+			display_contact(pb);
+			if (display_index(pb) == 1)
+				return (1);
 		}
 		else
 		{
